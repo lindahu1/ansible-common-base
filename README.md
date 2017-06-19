@@ -1,4 +1,4 @@
-common-base
+common
 -----------
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)&nbsp;&nbsp;&nbsp;&nbsp;[![Build Status](https://travis-ci.org/lindahu1/ansible-common-base.svg?branch=master)](https://travis-ci.org/lindahu1/ansible-common-base#)
@@ -67,7 +67,7 @@ Example Playbook
   become: yes
 
   roles:
-    - ansible-common-base
+    - { role: lindahu1.common }
 ```
 
 
