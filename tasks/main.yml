@@ -1,0 +1,38 @@
+---
+- name: Add the OS specific variables
+  include_vars: "{{ ansible_os_family | default('main') }}.yml"
+  when: ansible_distribution != 'Amazon'
+  tags: [pkgs,pip,config,sshd]
+
+- name: Add the OS specific variables for Amazon
+  include_vars: "{{ ansible_distribution | default('main') }}.yml"
+  when: ansible_distribution == 'Amazon'
+  tags: [pkgs,pip,config,sshd]
+
+
+# set timezone
+- name: set timezone to {{ timezone }}
+  timezone:
+    name: "{{ timezone }}"
+  become: yes
+  no_log: false
+  tags: [config]
+
+# Install common packages
+- include: common_pkgs.yml
+  tags: pkgs
+
+# Install pip
+- include: pip.yml
+  when: install_pip
+  tags: [pip,pkgs]
+
+
+# Configure common setting
+- include: common_config.yml
+  tags: [config]
+
+# Configure sshd setting
+- include: sshd.yml
+  tags: [sshd]
+...

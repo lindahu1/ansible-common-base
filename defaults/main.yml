@@ -1,0 +1,30 @@
+---
+timezone: 'Asia/Taipei'
+ntp_cron_min: '2'
+ntp_cron_hour: '*/3'
+common_pkgs: []
+rootalias: '' 
+sshd_service: sshd
+bashrc_path: ''
+sshd_config_path: '/etc/ssh/sshd_config'
+install_pip: true
+source_dir: '/tmp'
+must_removed_pkgs:
+  - postfix
+  - python-pip
+  - python2-pip
+  - python27-pip
+
+sshd_config:
+  PasswordAuthentication: 'yes'
+  PermitEmptyPasswords: 'no'
+  PermitRootLogin: 'no'
+  ListenAddress: '0.0.0.0'
+
+pip_install_pkgs: []
+#  - awscli
+#  - { name: awscli, state: latest }
+#  - { name: simplejson, version: 3.11.0 }
+
+pip_remove_pkgs: []
+#  - awscli

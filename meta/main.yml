@@ -1,0 +1,38 @@
+galaxy_info:
+  author: Linda Hu
+  description: Ansible role to install and configure some basic OS setting for an initial server.
+  company: 
+  license: MIT
+  min_ansible_version: 2.3
+  #
+  # platforms is a list of platforms, and each platform has a name and a list of versions.
+  #
+  platforms:
+  - name: Ubuntu
+    versions:
+    - xenial
+    - trusty
+    - precise
+  - name: EL
+    versions:
+    - 6
+    - 7
+  - name: Amazon
+    versions:
+    - 2017.03
+  - name: openSUSE
+    versions:
+    - 42.1
+
+  galaxy_tags:
+    - system
+    - ssh
+    - apt
+    - yum
+    - pip
+    - python
+    - timezone
+    - packages
+    - deployment
+
+dependencies: []

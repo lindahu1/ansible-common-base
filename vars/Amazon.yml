@@ -1,0 +1,14 @@
+---
+sshd_service: sshd
+bashrc_path: '/etc/bashrc'
+common_pkgs:
+  - vim
+  - curl
+  - wget
+  - python27
+  - python27-setuptools
+  - sysstat
+  - sendmail
+  - mailx
+  - telnet
+

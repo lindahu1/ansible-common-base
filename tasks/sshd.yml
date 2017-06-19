@@ -1,0 +1,142 @@
+---
+# ListenAddress
+- name: check sshd config - comment ListenAddress
+  command: grep -c "^#ListenAddress 0.0.0.0" {{ sshd_config_path | default('/etc/ssh/sshd_config') }}
+  register: mark_ListenAddress_result
+  when: sshd_config.ListenAddress is defined and sshd_config.ListenAddress != ''
+  failed_when: no
+  changed_when: no
+
+- name: check sshd config - ListenAddress
+  command: grep -c "^ListenAddress 0.0.0.0" {{ sshd_config_path | default('/etc/ssh/sshd_config') }}
+  register: unmark_ListenAddress_result
+  when: sshd_config.ListenAddress is defined and sshd_config.ListenAddress != ''
+  failed_when: no
+  changed_when: no
+
+- name: display ListenAddress result
+  debug:
+    msg: "Comment:{{ mark_ListenAddress_result.rc }} Uncomment:{{ unmark_ListenAddress_result.rc }}"
+  when: sshd_config.ListenAddress is defined and sshd_config.ListenAddress != ''
+  changed_when: no
+
+- name: uncomment ListenAddress
+  lineinfile:
+    dest: "{{ sshd_config_path | default('/etc/ssh/sshd_config') }}"
+    regexp: '^#ListenAddress 0.0.0.0'
+    line: "ListenAddress {{ sshd_config.ListenAddress }}"
+    backrefs: yes
+  when: sshd_config.ListenAddress is defined and sshd_config.ListenAddress != '' and mark_ListenAddress_result.rc == 0 and unmark_ListenAddress_result.rc != 0
+  no_log: false
+  notify:
+    - restart sshd
+
+
+# PasswordAuthentication
+- name: check sshd config - comment PasswordAuthentication
+  command: grep -c "^#PasswordAuthentication" {{ sshd_config_path | default('/etc/ssh/sshd_config') }}
+  register: mark_PasswordAuthentication_result
+  failed_when: no
+  changed_when: no
+
+- name: check sshd config - PasswordAuthentication
+  command: grep -c "^PasswordAuthentication" {{ sshd_config_path | default('/etc/ssh/sshd_config') }}
+  register: unmark_PasswordAuthentication_result
+  failed_when: no
+  changed_when: no
+
+- name: display PasswordAuthentication result
+  debug:
+    msg: "Comment:{{ mark_PasswordAuthentication_result.rc }} Uncomment:{{ unmark_PasswordAuthentication_result.rc }}"
+  changed_when: no
+
+- name: uncomment PasswordAuthentication
+  lineinfile:
+    dest: "{{ sshd_config_path | default('/etc/ssh/sshd_config') }}"
+    regexp: '^#PasswordAuthentication '
+    line: "PasswordAuthentication {{ sshd_config.PasswordAuthentication }}"
+    backrefs: yes
+  when: mark_PasswordAuthentication_result.rc == 0 and unmark_PasswordAuthentication_result.rc != 0
+  no_log: false
+  notify:
+    - restart sshd
+
+
+# PermitEmptyPasswords
+- name: check sshd config - comment PermitEmptyPasswords
+  command: grep -c "^#PermitEmptyPasswords" {{ sshd_config_path | default('/etc/ssh/sshd_config') }}
+  register: mark_PermitEmptyPasswords_result
+  failed_when: no
+  changed_when: no
+
+- name: check sshd config - PermitEmptyPasswords
+  command: grep -c "^PermitEmptyPasswords" {{ sshd_config_path | default('/etc/ssh/sshd_config') }}
+  register: unmark_PermitEmptyPasswords_result
+  failed_when: no
+  changed_when: no
+
+- name: display PermitEmptyPasswords result
+  debug:
+    msg: "Comment:{{ mark_PermitEmptyPasswords_result.rc }} Uncomment:{{ unmark_PermitEmptyPasswords_result.rc }}"
+  changed_when: no
+
+- name: uncomment PermitEmptyPasswords
+  lineinfile:
+    dest: "{{ sshd_config_path | default('/etc/ssh/sshd_config') }}"
+    regexp: '^#PermitEmptyPasswords '
+    line: "PermitEmptyPasswords {{ sshd_config.PermitEmptyPasswords }}"
+    backrefs: yes
+  when: mark_PermitEmptyPasswords_result.rc == 0 and unmark_PermitEmptyPasswords_result.rc != 0
+  no_log: false
+  notify:
+    - restart sshd
+
+
+# PermitRootLogin
+- name: check sshd config - comment PermitRootLogin
+  command: grep -c "^#PermitRootLogin" {{ sshd_config_path | default('/etc/ssh/sshd_config') }}
+  register: mark_PermitRootLogin_result
+  failed_when: no
+  changed_when: no
+
+- name: check sshd config - PermitRootLogin
+  command: grep -c "^PermitRootLogin" {{ sshd_config_path | default('/etc/ssh/sshd_config') }}
+  register: unmark_PermitRootLogin_result
+  failed_when: no
+  changed_when: no
+
+- name: display PermitRootLogin result
+  debug:
+    msg: "Comment:{{ mark_PermitRootLogin_result.rc }} Uncomment:{{ unmark_PermitRootLogin_result.rc }}"
+  changed_when: no
+
+- name: uncomment PermitRootLogin
+  lineinfile:
+    dest: "{{ sshd_config_path | default('/etc/ssh/sshd_config') }}"
+    regexp: '^#PermitRootLogin '
+    line: "PermitRootLogin {{ sshd_config.PermitRootLogin }}"
+    backrefs: yes
+  when: mark_PermitRootLogin_result.rc == 0 and unmark_PermitRootLogin_result.rc != 0
+  no_log: false
+  notify:
+    - restart sshd
+
+
+#
+# Compliance - check again
+#
+#  - ListenAddress 0.0.0.0
+#  - PasswordAuthentication yes
+#  - PermitEmptyPasswords no
+#  - PermitRootLogin no
+#
+- name: sshd - Configuraiton Compliance
+  lineinfile:
+    dest: "{{ sshd_config_path | default('/etc/ssh/sshd_config') }}"
+    regexp: "^{{ item.key }}"
+    line: "{{ item.key }} {{ item.value }}"
+    backrefs: yes
+  with_dict: "{{ sshd_config }}"
+  no_log: false
+  notify:
+    - restart sshd

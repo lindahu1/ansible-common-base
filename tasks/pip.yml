@@ -1,0 +1,58 @@
+---
+#
+# install pip
+#
+- name: check if pip is installed
+  environment:
+    PATH: "{{ ansible_env.PATH }}:/usr/local/bin"
+  command: which pip
+  register: installed_pip
+  changed_when: no
+  failed_when: no
+  no_log: False
+
+- name: download pip installer
+  get_url:
+    url=https://bootstrap.pypa.io/get-pip.py
+    dest="{{ source_dir | default('/tmp') }}/get-pip.py"
+  become: yes
+  when: installed_pip is defined and installed_pip.rc != 0
+  no_log: False
+
+- name: install pip
+  command: "python {{ source_dir | default('/tmp') }}/get-pip.py"
+  become: yes
+  when: installed_pip is defined and installed_pip.rc != 0
+  no_log: False
+
+- name: check if pip is installed
+  environment:
+    PATH: "{{ ansible_env.PATH }}:/usr/local/bin"
+  command: pip --version
+  when: installed_pip is defined
+  changed_when: no
+  no_log: false
+
+
+- name: Install pip packages
+  environment:
+    PATH: "{{ ansible_env.PATH }}:/usr/local/bin"
+  pip:
+    name: "{{ item.name | default(item) }}"
+    version: "{{ item.version | default(omit) }}"
+    state: "{{ item.state | default('present') }}"
+    executable: "{{ item.executable | default(omit) }}"
+  when: item is defined
+  with_items: "{{ pip_install_pkgs }}"
+  no_log: false
+
+- name: Remove pip packages
+  environment:
+    PATH: "{{ ansible_env.PATH }}:/usr/local/bin"
+  pip:
+    name: "{{ item.name | default(item) }}"
+    state: absent
+    executable: "{{ item.executable | default(omit) }}"
+  when: item is defined
+  with_items: "{{ pip_remove_pkgs }}"
+  no_log: false

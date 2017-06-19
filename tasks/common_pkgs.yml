@@ -1,0 +1,38 @@
+---
+# Add EPEL repository
+- name: install EPEL repository
+  yum:
+    name: epel-release
+    state: present
+  when: ansible_pkg_mgr == 'yum'
+  become: yes
+  no_log: False
+  tags: pkgs
+
+
+# Remove unwanted package
+- name: Remove unwatned packages
+  action: "{{ ansible_pkg_mgr }} name={{ item }} state=absent"
+  with_items: "{{ must_removed_pkgs }}"
+  when: ansible_pkg_mgr is defined
+  become: yes
+  no_log: False
+  tags: pkgs
+
+# install common package
+- name: install common packages for non-Debian OS
+  action: "{{ ansible_pkg_mgr }} name={{ item }} state=present update_cache=yes"
+  with_items: "{{ common_pkgs }}"
+  when: ansible_os_family != 'Debian' and ansible_pkg_mgr is defined
+  become: yes
+  no_log: False
+  tags: pkgs
+
+- name: install common packages for Debian/Ubuntu
+  action: "{{ ansible_pkg_mgr }} name={{ item }} state=present update_cache=yes cache_valid_time=345600 autoclean=yes autoremove=yes"
+  with_items: "{{ common_pkgs }}"
+  when: ansible_os_family == 'Debian'
+  become: yes
+  no_log: False
+  tags: pkgs
+
