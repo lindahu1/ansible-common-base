@@ -18,7 +18,7 @@
   notify:
     - newaliases
 
-- name: set cron for ntp update 
+- name: set cron for ntp update
   cron:
     name: "set ntp update"
     state: present
@@ -30,7 +30,7 @@
   no_log: false
   when: ntp_cron_min is defined and ntp_cron_hour is defined and ntp_cron_min != '' and ntp_cron_hour != '' and (not ntp_cron_min is none) and (not ntp_cron_hour is none)
 
-- name: remove cron for ntp update 
+- name: remove cron for ntp update
   cron:
     name: "set ntp update"
     state: absent

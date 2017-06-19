@@ -1,7 +1,7 @@
 galaxy_info:
   author: Linda Hu
   description: Ansible role to install and configure some basic OS setting for an initial server.
-  company: 
+  company:
   license: MIT
   min_ansible_version: 2.3
   #
@@ -19,10 +19,10 @@ galaxy_info:
     - 7
   - name: Amazon
     versions:
-    - 2017.03
-  - name: openSUSE
+    - 2016.09
+  - name: opensuse
     versions:
-    - 42.1
+    - 13.2
 
   galaxy_tags:
     - system

@@ -25,7 +25,7 @@ An Ansible role to install and configure some basic OS setting for an initial se
 Requirements
 ------------
 
-- [ansible](https://ansible.com) >= 2.2
+- [ansible](https://ansible.com) >= 2.3
 
 
 Role Variables
@@ -40,7 +40,8 @@ Role Variables
 - **bashrc_path**: the bashrc path. ex: Debian: /etc/bash.bashrc, RedHat: /etc/bashrc.
 - **sshd_config_path**: the path of sshd_config. (Default: /etc/ssh/sshd_config)
 - **install_pip**: flag to install pip. (Default: True)
-  - if you want to run this role on centos5, MUST set `install_pip: False`.
+  - if you want to run this role on **CentOS5**, MUST set `install_pip: False`.
+  - This role does NOT support install pip and install/remove python packages on CentOS5.
 - **source_dir**: the path of directory to store downloaded files. (Default: /tmp)
 - **must_removed_pkgs**: a list of packages you want to remove. (Default: postfix, python-pip, python2-pip, python27-pip)
 - **sshd_config**: a dictionary of sshd_config, Default value is as below.
@@ -130,6 +131,7 @@ Tags
 - **pip**: install pip and install/remove python packages.
 - **config**: 
   - set timezone
+  - add ntp update in cron
   - set PROMPT_COMMAND for audit log
   - set root: alias for sendmail.
 - **sshd**: configure /etc/ssh/sshd_config.
