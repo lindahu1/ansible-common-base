@@ -2,7 +2,6 @@
 - hosts: localhost
   remote_user: root
   become: yes
-  include_vars: defaults/main.yml
 
   roles:
     - ansible-common-base

@@ -29,11 +29,11 @@ script:
   - ansible-playbook -i localhost, tests/test.yml --syntax-check
 
   # Run the role/playbook with ansible-playbook.
-  - ansible-playbook -i localhost, --connection=local tests/test.yml
+  - ansible-playbook -i localhost, --connection=local tests/test.yml -e @defaults/main.yml
 
   # Idempotent check
   - >
-    ansible-playbook -i localhost, --connection=local tests/test.yml
+    ansible-playbook -i localhost, --connection=local tests/test.yml -e @defaults/main.yml
     | grep -q 'changed=0.*unreachable=0.*failed=0'
     && (echo 'Idempotence test: pass' && exit 0)
     || (echo 'Idempotence test: fail' && exit 1)
@@ -47,10 +47,10 @@ script:
   - egrep -q '^PasswordAuthentication yes' /etc/ssh/sshd_config
   - egrep -q '^PermitEmptyPasswords no' /etc/ssh/sshd_config
   - egrep -q '^PermitRootLogin no' /etc/ssh/sshd_config
-  - pip list --format=columns | grep awscli | wc -l | awk '{ if($1 == 1) print "OK" }' | grep -q OK
-  - pip list --format=columns | grep ansible-lint | wc -l | awk '{ if($1 == 0) print "OK" }' | grep -q OK
-  - dpkg -l | egrep python-pip | wc -l | awk '{ if($1 == 0) print "OK" }' | grep -q OK
-  - dpkg -l | grep sendmail | wc -l | awk '{ if($1 == 1) print "OK" }' | grep -q OK
+  - sudo -H pip list --format=columns | grep awscli | wc -l | awk '{ if($1 == 1) print "OK" }' | grep -q OK
+  - sudo -H pip list --format=columns | grep ansible-lint | wc -l | awk '{ if($1 == 0) print "OK" }' | grep -q OK
+  - dpkg -l | egrep 'python-pip ' | wc -l | awk '{ if($1 == 0) print "OK" }' | grep -q OK
+  - dpkg -l | grep 'sendmail ' | wc -l | awk '{ if($1 == 1) print "OK" }' | grep -q OK
 
 
 notifications:
