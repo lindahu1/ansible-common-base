@@ -1,4 +1,7 @@
 ---
+- debug:
+    msg: "sshd serverice name - {{ sshd_service }} [{{ ansible_os_family }}]"
+
 # ListenAddress
 - name: check sshd config - comment ListenAddress
   command: grep -c "^#ListenAddress 0.0.0.0" {{ sshd_config_path | default('/etc/ssh/sshd_config') }}
