@@ -1,9 +1,9 @@
 ---
 rootalias: 'test@abc.com'
-pip_install_pkgs: []
+pip_install_pkgs:
   - awscli
   - { name: awscli, state: latest }
   - { name: simplejson, version: 3.10.0 }
 
-pip_remove_pkgs: []
+pip_remove_pkgs:
   - ansible-lint

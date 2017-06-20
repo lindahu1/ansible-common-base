@@ -24,7 +24,7 @@ sshd_config:
 pip_install_pkgs: []
 #  - awscli
 #  - { name: awscli, state: latest }
-#  - { name: simplejson, version: 3.11.1 }
+#  - { name: simplejson, version: 3.10.0 }
 
 pip_remove_pkgs: []
 #  - awscli
