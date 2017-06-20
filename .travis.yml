@@ -41,11 +41,11 @@ script:
 
   # Verify final results
   - date |grep -q CST
-  - source /etc/bash.bashrc && echo $PROMPT_COMMAND |grep -q authpriv.info
+  #- source /etc/bash.bashrc && echo $PROMPT_COMMAND |grep -q authpriv.info
+  - egrep "^export PROMPT_COMMAND" /etc/bash.bashrc | grep  authpriv.info
   - grep 'root:' /etc/aliases | grep -q 'test@abc.com'
   - sudo crontab -l | grep ntpdate | grep -q "2 \*/3"
   - egrep -q '^ListenAddress 0.0.0.0$' /etc/ssh/sshd_config
-  - egrep 'PasswordAuthentication ' /etc/ssh/sshd_config
   - egrep -q '^PasswordAuthentication\s+yes' /etc/ssh/sshd_config
   - egrep -q '^PermitEmptyPasswords\s+no' /etc/ssh/sshd_config
   - egrep -q '^PermitRootLogin\s+no' /etc/ssh/sshd_config

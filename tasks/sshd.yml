@@ -1,14 +1,14 @@
 ---
 # ListenAddress
 - name: check sshd config - comment ListenAddress
-  command: grep -c "^#ListenAddress 0.0.0.0" {{ sshd_config_path | default('/etc/ssh/sshd_config') }}
+  command: egrep -c "^#ListenAddress\s+0.0.0.0" {{ sshd_config_path | default('/etc/ssh/sshd_config') }}
   register: mark_ListenAddress_result
   when: sshd_config.ListenAddress is defined and sshd_config.ListenAddress != ''
   failed_when: no
   changed_when: no
 
 - name: check sshd config - ListenAddress
-  command: grep -c "^ListenAddress 0.0.0.0" {{ sshd_config_path | default('/etc/ssh/sshd_config') }}
+  command: egrep -c "^ListenAddress\s+0.0.0.0" {{ sshd_config_path | default('/etc/ssh/sshd_config') }}
   register: unmark_ListenAddress_result
   when: sshd_config.ListenAddress is defined and sshd_config.ListenAddress != ''
   failed_when: no
@@ -27,6 +27,7 @@
     line: "ListenAddress {{ sshd_config.ListenAddress }}"
     backrefs: yes
   when: sshd_config.ListenAddress is defined and sshd_config.ListenAddress != '' and mark_ListenAddress_result.rc == 0 and unmark_ListenAddress_result.rc != 0
+  become: yes
   no_log: false
   notify:
     - restart sshd
@@ -34,13 +35,13 @@
 
 # PasswordAuthentication
 - name: check sshd config - comment PasswordAuthentication
-  command: grep -c "^#PasswordAuthentication" {{ sshd_config_path | default('/etc/ssh/sshd_config') }}
+  command: egrep -c "^#PasswordAuthentication\s+" {{ sshd_config_path | default('/etc/ssh/sshd_config') }}
   register: mark_PasswordAuthentication_result
   failed_when: no
   changed_when: no
 
 - name: check sshd config - PasswordAuthentication
-  command: grep -c "^PasswordAuthentication" {{ sshd_config_path | default('/etc/ssh/sshd_config') }}
+  command: egrep -c "^PasswordAuthentication\s+" {{ sshd_config_path | default('/etc/ssh/sshd_config') }}
   register: unmark_PasswordAuthentication_result
   failed_when: no
   changed_when: no
@@ -57,6 +58,7 @@
     line: "PasswordAuthentication {{ sshd_config.PasswordAuthentication }}"
     backrefs: yes
   when: mark_PasswordAuthentication_result.rc == 0 and unmark_PasswordAuthentication_result.rc != 0
+  become: yes
   no_log: false
   notify:
     - restart sshd
@@ -64,13 +66,13 @@
 
 # PermitEmptyPasswords
 - name: check sshd config - comment PermitEmptyPasswords
-  command: grep -c "^#PermitEmptyPasswords" {{ sshd_config_path | default('/etc/ssh/sshd_config') }}
+  command: egrep -c "^#PermitEmptyPasswords\s+" {{ sshd_config_path | default('/etc/ssh/sshd_config') }}
   register: mark_PermitEmptyPasswords_result
   failed_when: no
   changed_when: no
 
 - name: check sshd config - PermitEmptyPasswords
-  command: grep -c "^PermitEmptyPasswords" {{ sshd_config_path | default('/etc/ssh/sshd_config') }}
+  command: egrep -c "^PermitEmptyPasswords\s+" {{ sshd_config_path | default('/etc/ssh/sshd_config') }}
   register: unmark_PermitEmptyPasswords_result
   failed_when: no
   changed_when: no
@@ -87,6 +89,7 @@
     line: "PermitEmptyPasswords {{ sshd_config.PermitEmptyPasswords }}"
     backrefs: yes
   when: mark_PermitEmptyPasswords_result.rc == 0 and unmark_PermitEmptyPasswords_result.rc != 0
+  become: yes
   no_log: false
   notify:
     - restart sshd
@@ -94,13 +97,13 @@
 
 # PermitRootLogin
 - name: check sshd config - comment PermitRootLogin
-  command: grep -c "^#PermitRootLogin" {{ sshd_config_path | default('/etc/ssh/sshd_config') }}
+  command: egrep -c "^#PermitRootLogin\s+" {{ sshd_config_path | default('/etc/ssh/sshd_config') }}
   register: mark_PermitRootLogin_result
   failed_when: no
   changed_when: no
 
 - name: check sshd config - PermitRootLogin
-  command: grep -c "^PermitRootLogin" {{ sshd_config_path | default('/etc/ssh/sshd_config') }}
+  command: egrep -c "^PermitRootLogin\s+" {{ sshd_config_path | default('/etc/ssh/sshd_config') }}
   register: unmark_PermitRootLogin_result
   failed_when: no
   changed_when: no
@@ -117,6 +120,7 @@
     line: "PermitRootLogin {{ sshd_config.PermitRootLogin }}"
     backrefs: yes
   when: mark_PermitRootLogin_result.rc == 0 and unmark_PermitRootLogin_result.rc != 0
+  become: yes
   no_log: false
   notify:
     - restart sshd
@@ -137,6 +141,7 @@
     line: "{{ item.key }} {{ item.value }}"
     backrefs: yes
   with_dict: "{{ sshd_config }}"
+  become: yes
   no_log: false
   notify:
     - restart sshd
