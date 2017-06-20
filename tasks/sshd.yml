@@ -145,3 +145,11 @@
   no_log: false
   notify:
     - restart sshd
+
+- name: debug sshd_config
+  command: cat /etc/ssh/sshd_config
+  register: cat_sshd_config
+  changed_when: no
+
+- debug: 
+    msg: "{{ cat_sshd_config }}"
