@@ -27,14 +27,14 @@ install:
 
 script:
   # Basic role syntax check
-  - ansible-playbook -i localhost, tests/test.yml --syntax-check
+  - ansible-playbook -i tests/inventory tests/test.yml --syntax-check
 
   # Run the role/playbook with ansible-playbook.
-  - ansible-playbook -i localhost, --connection=local tests/test.yml -e @defaults/main.yml
+  - ansible-playbook -i tests/inventory tests/test.yml
 
   # Idempotent check
   - >
-    ansible-playbook -i localhost, --connection=local tests/test.yml -e @defaults/main.yml
+    ansible-playbook -i tests/inventory tests/test.yml
     | grep -q 'changed=0.*unreachable=0.*failed=0'
     && (echo 'Idempotence test: pass' && exit 0)
     || (echo 'Idempotence test: fail' && exit 1)
