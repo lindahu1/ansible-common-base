@@ -8,7 +8,7 @@ common_pkgs:
   - gcc
   - python
   - python-setuptools
-  - python-devel 
+  - python-devel
   - libffi-devel-gcc5
   - openssl-devel
   - sysstat

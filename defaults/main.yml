@@ -3,7 +3,7 @@ timezone: 'Asia/Taipei'
 ntp_cron_min: '2'
 ntp_cron_hour: '*/3'
 common_pkgs: []
-rootalias: '' 
+rootalias: ''
 sshd_service: sshd
 bashrc_path: ''
 sshd_config_path: '/etc/ssh/sshd_config'

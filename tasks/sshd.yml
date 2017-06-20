@@ -3,30 +3,48 @@
 - name: check sshd config - comment ListenAddress
   command: egrep -c "^#ListenAddress\s+0.0.0.0" {{ sshd_config_path | default('/etc/ssh/sshd_config') }}
   register: mark_ListenAddress_result
-  when: sshd_config.ListenAddress is defined and sshd_config.ListenAddress != ''
+  when: sshd_config.ListenAddress is defined and sshd_config.ListenAddress != '' and (not sshd_config.ListenAddress is none)
   failed_when: no
   changed_when: no
 
 - name: check sshd config - ListenAddress
   command: egrep -c "^ListenAddress\s+0.0.0.0" {{ sshd_config_path | default('/etc/ssh/sshd_config') }}
   register: unmark_ListenAddress_result
-  when: sshd_config.ListenAddress is defined and sshd_config.ListenAddress != ''
+  when: sshd_config.ListenAddress is defined and sshd_config.ListenAddress != '' and (not sshd_config.ListenAddress is none)
   failed_when: no
   changed_when: no
 
 - name: display ListenAddress result
   debug:
     msg: "Comment:{{ mark_ListenAddress_result.rc }} Uncomment:{{ unmark_ListenAddress_result.rc }}"
-  when: sshd_config.ListenAddress is defined and sshd_config.ListenAddress != ''
+  when: sshd_config.ListenAddress is defined and sshd_config.ListenAddress != '' and (not sshd_config.ListenAddress is none)
   changed_when: no
 
 - name: uncomment ListenAddress
   lineinfile:
-    dest: "{{ sshd_config_path | default('/etc/ssh/sshd_config') }}"
+    path: "{{ sshd_config_path | default('/etc/ssh/sshd_config') }}"
     regexp: '^#ListenAddress 0.0.0.0'
     line: "ListenAddress {{ sshd_config.ListenAddress }}"
     backrefs: yes
-  when: sshd_config.ListenAddress is defined and sshd_config.ListenAddress != '' and mark_ListenAddress_result.rc == 0 and unmark_ListenAddress_result.rc != 0
+  when: >
+    sshd_config.ListenAddress is defined and sshd_config.ListenAddress != ''
+    and (not sshd_config.ListenAddress is none) and
+    mark_ListenAddress_result.rc == 0 and unmark_ListenAddress_result.rc != 0
+  become: yes
+  no_log: false
+  notify:
+    - restart sshd
+
+- name: add ListenAddress
+  lineinfile:
+    path: "{{ sshd_config_path | default('/etc/ssh/sshd_config') }}"
+    regexp: '^ListenAddress 0.0.0.0'
+    line: "ListenAddress {{ sshd_config.ListenAddress }}"
+    state: present
+  when: >
+    sshd_config.ListenAddress is defined and sshd_config.ListenAddress != ''
+    and (not sshd_config.ListenAddress is none) and
+    mark_ListenAddress_result.rc != 0 and unmark_ListenAddress_result.rc != 0
   become: yes
   no_log: false
   notify:
@@ -37,58 +55,99 @@
 - name: check sshd config - comment PasswordAuthentication
   command: egrep -c "^#PasswordAuthentication\s+" {{ sshd_config_path | default('/etc/ssh/sshd_config') }}
   register: mark_PasswordAuthentication_result
+  when: sshd_config.PasswordAuthentication is defined and sshd_config.PasswordAuthentication != '' and (not sshd_config.PasswordAuthentication is none)
   failed_when: no
   changed_when: no
 
 - name: check sshd config - PasswordAuthentication
   command: egrep -c "^PasswordAuthentication\s+" {{ sshd_config_path | default('/etc/ssh/sshd_config') }}
   register: unmark_PasswordAuthentication_result
+  when: sshd_config.PasswordAuthentication is defined and sshd_config.PasswordAuthentication != '' and (not sshd_config.PasswordAuthentication is none)
   failed_when: no
   changed_when: no
 
 - name: display PasswordAuthentication result
   debug:
     msg: "Comment:{{ mark_PasswordAuthentication_result.rc }} Uncomment:{{ unmark_PasswordAuthentication_result.rc }}"
+  when: sshd_config.PasswordAuthentication is defined and sshd_config.PasswordAuthentication != '' and (not sshd_config.PasswordAuthentication is none)
   changed_when: no
 
 - name: uncomment PasswordAuthentication
   lineinfile:
-    dest: "{{ sshd_config_path | default('/etc/ssh/sshd_config') }}"
+    path: "{{ sshd_config_path | default('/etc/ssh/sshd_config') }}"
     regexp: '^#PasswordAuthentication '
     line: "PasswordAuthentication {{ sshd_config.PasswordAuthentication }}"
     backrefs: yes
-  when: mark_PasswordAuthentication_result.rc == 0 and unmark_PasswordAuthentication_result.rc != 0
+  when: >
+    sshd_config.PasswordAuthentication is defined and sshd_config.PasswordAuthentication != ''
+    and (not sshd_config.PasswordAuthentication is none) and
+    mark_PasswordAuthentication_result.rc == 0 and unmark_PasswordAuthentication_result.rc != 0
   become: yes
   no_log: false
   notify:
     - restart sshd
+
+- name: add PasswordAuthentication
+  lineinfile:
+    path: "{{ sshd_config_path | default('/etc/ssh/sshd_config') }}"
+    regexp: '^PasswordAuthentication '
+    line: "PasswordAuthentication {{ sshd_config.PasswordAuthentication }}"
+    state: present
+  when: >
+    sshd_config.PasswordAuthentication is defined and sshd_config.PasswordAuthentication != ''
+    and (not sshd_config.PasswordAuthentication is none) and
+    mark_PasswordAuthentication_result.rc != 0 and unmark_PasswordAuthentication_result.rc != 0
+  become: yes
+  no_log: false
+  notify:
 
 
 # PermitEmptyPasswords
 - name: check sshd config - comment PermitEmptyPasswords
   command: egrep -c "^#PermitEmptyPasswords\s+" {{ sshd_config_path | default('/etc/ssh/sshd_config') }}
   register: mark_PermitEmptyPasswords_result
+  when: sshd_config.PermitEmptyPasswords is defined and sshd_config.PermitEmptyPasswords != '' and (not sshd_config.PermitEmptyPasswords is none)
   failed_when: no
   changed_when: no
 
 - name: check sshd config - PermitEmptyPasswords
   command: egrep -c "^PermitEmptyPasswords\s+" {{ sshd_config_path | default('/etc/ssh/sshd_config') }}
   register: unmark_PermitEmptyPasswords_result
+  when: sshd_config.PermitEmptyPasswords is defined and sshd_config.PermitEmptyPasswords != '' and (not sshd_config.PermitEmptyPasswords is none)
   failed_when: no
   changed_when: no
 
 - name: display PermitEmptyPasswords result
   debug:
     msg: "Comment:{{ mark_PermitEmptyPasswords_result.rc }} Uncomment:{{ unmark_PermitEmptyPasswords_result.rc }}"
+  when: sshd_config.PermitEmptyPasswords is defined and sshd_config.PermitEmptyPasswords != '' and (not sshd_config.PermitEmptyPasswords is none)
   changed_when: no
 
 - name: uncomment PermitEmptyPasswords
   lineinfile:
-    dest: "{{ sshd_config_path | default('/etc/ssh/sshd_config') }}"
+    path: "{{ sshd_config_path | default('/etc/ssh/sshd_config') }}"
     regexp: '^#PermitEmptyPasswords '
     line: "PermitEmptyPasswords {{ sshd_config.PermitEmptyPasswords }}"
     backrefs: yes
-  when: mark_PermitEmptyPasswords_result.rc == 0 and unmark_PermitEmptyPasswords_result.rc != 0
+  when:
+    sshd_config.PermitEmptyPasswords is defined and sshd_config.PermitEmptyPasswords != ''
+    and (not sshd_config.PermitEmptyPasswords is none) and
+    mark_PermitEmptyPasswords_result.rc == 0 and unmark_PermitEmptyPasswords_result.rc != 0
+  become: yes
+  no_log: false
+  notify:
+    - restart sshd
+
+- name: add PermitEmptyPasswords
+  lineinfile:
+    path: "{{ sshd_config_path | default('/etc/ssh/sshd_config') }}"
+    regexp: '^PermitEmptyPasswords '
+    line: "PermitEmptyPasswords {{ sshd_config.PermitEmptyPasswords }}"
+    state: present
+  when:
+    sshd_config.PermitEmptyPasswords is defined and sshd_config.PermitEmptyPasswords != ''
+    and (not sshd_config.PermitEmptyPasswords is none) and
+    mark_PermitEmptyPasswords_result.rc != 0 and unmark_PermitEmptyPasswords_result.rc != 0
   become: yes
   no_log: false
   notify:
@@ -99,27 +158,48 @@
 - name: check sshd config - comment PermitRootLogin
   command: egrep -c "^#PermitRootLogin\s+" {{ sshd_config_path | default('/etc/ssh/sshd_config') }}
   register: mark_PermitRootLogin_result
+  when: sshd_config.PermitRootLogin is defined and sshd_config.PermitRootLogin != '' and (not sshd_config.PermitRootLogin is none)
   failed_when: no
   changed_when: no
 
 - name: check sshd config - PermitRootLogin
   command: egrep -c "^PermitRootLogin\s+" {{ sshd_config_path | default('/etc/ssh/sshd_config') }}
   register: unmark_PermitRootLogin_result
+  when: sshd_config.PermitRootLogin is defined and sshd_config.PermitRootLogin != '' and (not sshd_config.PermitRootLogin is none)
   failed_when: no
   changed_when: no
 
 - name: display PermitRootLogin result
   debug:
     msg: "Comment:{{ mark_PermitRootLogin_result.rc }} Uncomment:{{ unmark_PermitRootLogin_result.rc }}"
+  when: sshd_config.PermitRootLogin is defined and sshd_config.PermitRootLogin != '' and (not sshd_config.PermitRootLogin is none)
   changed_when: no
 
 - name: uncomment PermitRootLogin
   lineinfile:
-    dest: "{{ sshd_config_path | default('/etc/ssh/sshd_config') }}"
+    path: "{{ sshd_config_path | default('/etc/ssh/sshd_config') }}"
     regexp: '^#PermitRootLogin '
     line: "PermitRootLogin {{ sshd_config.PermitRootLogin }}"
     backrefs: yes
-  when: mark_PermitRootLogin_result.rc == 0 and unmark_PermitRootLogin_result.rc != 0
+  when: >
+    sshd_config.PermitRootLogin is defined and sshd_config.PermitRootLogin != ''
+    and (not sshd_config.PermitRootLogin is none) and
+    mark_PermitRootLogin_result.rc == 0 and unmark_PermitRootLogin_result.rc != 0
+  become: yes
+  no_log: false
+  notify:
+    - restart sshd
+
+- name: add PermitRootLogin
+  lineinfile:
+    path: "{{ sshd_config_path | default('/etc/ssh/sshd_config') }}"
+    regexp: '^#PermitRootLogin '
+    line: "PermitRootLogin {{ sshd_config.PermitRootLogin }}"
+    state: present
+  when: >
+    sshd_config.PermitRootLogin is defined and sshd_config.PermitRootLogin != ''
+    and (not sshd_config.PermitRootLogin is none) and
+    mark_PermitRootLogin_result.rc != 0 and unmark_PermitRootLogin_result.rc != 0
   become: yes
   no_log: false
   notify:
@@ -136,7 +216,7 @@
 #
 - name: sshd - Configuraiton Compliance
   lineinfile:
-    dest: "{{ sshd_config_path | default('/etc/ssh/sshd_config') }}"
+    path: "{{ sshd_config_path | default('/etc/ssh/sshd_config') }}"
     regexp: "^{{ item.key }}"
     line: "{{ item.key }} {{ item.value }}"
     backrefs: yes
@@ -146,10 +226,3 @@
   notify:
     - restart sshd
 
-- name: debug sshd_config
-  command: cat /etc/ssh/sshd_config
-  register: cat_sshd_config
-  changed_when: no
-
-- debug: 
-    msg: "{{ cat_sshd_config }}"

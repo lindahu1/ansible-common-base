@@ -139,6 +139,7 @@ Tags
 
 Reminders
 ---------
+- You can move `lindahu1.common/vars/` sample yaml to `[you_playbook]/vars/`.
 - If you set **install_pip** == True, you better add the following packages in **common_pkgs**.
   or you may get `Failed building wheel for [cryptography](https://cryptography.io/en/latest/installation/)` while installing some python packages. 
   - For Debian and Ubuntu
@@ -180,8 +181,4 @@ Reminders
    - libffi-devel-gcc5
    - openssl-devel
   ```
-
-
-
-
 

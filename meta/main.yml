@@ -1,3 +1,4 @@
+---
 galaxy_info:
   author: Linda Hu
   description: Ansible role to install and configure some basic OS setting for an initial server.
