@@ -7,6 +7,10 @@ common_pkgs:
   - wget
   - python27
   - python27-setuptools
+  - python27-devel
+  - gcc
+  - libffi-devel
+  - openssl-devel
   - sysstat
   - sendmail
   - mailx

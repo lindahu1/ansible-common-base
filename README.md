@@ -137,3 +137,51 @@ Tags
 - **sshd**: configure /etc/ssh/sshd_config.
 
 
+Reminders
+---------
+- If you set **install_pip** == True, you better add the following packages in **common_pkgs**.
+  or you may get `Failed building wheel for [cryptography](https://cryptography.io/en/latest/installation/)` while installing some python packages. 
+  - For Debian and Ubuntu
+  ```yaml=
+   - python
+   - python-setuptools
+   - python-dev
+   - build-essential
+   - libssl-dev
+   - libffi-dev
+  ```
+
+  - For RHEL-derivatives
+  ```yaml=
+   - python
+   - python-setuptools
+   - python-dev
+   - gcc
+   - libffi-devel
+   - openssl-devel
+  ```
+
+  - For Amazon
+  ```yaml=
+   - python27
+   - python27-setuptools
+   - python27-dev
+   - gcc
+   - libffi-devel
+   - openssl-devel
+  ```
+
+  - For OpenSuse
+  ```yaml=
+   - python
+   - python-setuptools
+   - python-dev
+   - gcc
+   - libffi-devel-gcc5
+   - openssl-devel
+  ```
+
+
+
+
+

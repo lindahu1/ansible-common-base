@@ -5,8 +5,12 @@ common_pkgs:
   - vim
   - curl
   - wget
+  - gcc
   - python
   - python-setuptools
+  - python-devel 
+  - libffi-devel-gcc5
+  - openssl-devel
   - sysstat
   - sendmail
   - mailx

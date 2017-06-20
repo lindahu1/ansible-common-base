@@ -3,7 +3,7 @@ timezone: 'Asia/Taipei'
 ntp_cron_min: '2'
 ntp_cron_hour: '*/3'
 common_pkgs: []
-rootalias: '' 
+rootalias: 'test@abc.com' 
 sshd_service: sshd
 bashrc_path: ''
 sshd_config_path: '/etc/ssh/sshd_config'
@@ -21,12 +21,10 @@ sshd_config:
   PermitRootLogin: 'no'
   ListenAddress: '0.0.0.0'
 
-pip_install_pkgs:
+pip_install_pkgs: []
   - awscli
   - { name: awscli, state: latest }
   - { name: simplejson, version: 3.11.0 }
 
-pip_remove_pkgs:
-#  - awscli
-#  - ansible
+pip_remove_pkgs: []
   - ansible-lint

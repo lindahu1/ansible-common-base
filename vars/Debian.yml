@@ -6,7 +6,11 @@ common_pkgs:
   - curl
   - wget
   - python
+  - python-dev
   - python-setuptools
+  - build-essential
+  - libssl-dev
+  - libffi-dev
   - sysstat
   - sendmail
   - heirloom-mailx

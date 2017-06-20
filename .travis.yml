@@ -1,0 +1,58 @@
+---
+language: python
+python: "2.7"
+
+# Use the new container infrastructure
+sudo: required
+
+# Install ansible
+addons:
+  apt:
+    packages:
+    - python-pip
+
+install:
+  # Install ansible
+  - pip install ansible
+  - pip install ansible-lint
+
+  # Check ansible version
+  - ansible --version
+  - ansible-lint --version
+
+  # Create ansible.cfg with correct roles_path
+  - printf '[defaults]\nroles_path=../' >> ansible.cfg
+
+
+script:
+  # Basic role syntax check
+  - ansible-playbook -i localhost, tests/test.yml --syntax-check
+
+  # Run the role/playbook with ansible-playbook.
+  - ansible-playbook -i localhost, --connection=local tests/test.yml
+
+  # Idempotent check
+  - >
+    ansible-playbook -i localhost, --connection=local tests/test.yml
+    | grep -q 'changed=0.*unreachable=0.*failed=0'
+    && (echo 'Idempotence test: pass' && exit 0)
+    || (echo 'Idempotence test: fail' && exit 1)
+
+  # Verify final results
+  - date |grep -q CST
+  - echo $PROMPT_COMMAND |grep -q authpriv.info
+  - grep 'root:' /etc/aliases | grep -q 'test@abc.com'
+  - crontab -l | grep ntpdate | grep -q "2 \*/3"
+  - egrep -q '^ListenAddress 0.0.0.0$' /etc/ssh/sshd_config
+  - egrep -q '^PasswordAuthentication yes' /etc/ssh/sshd_config
+  - egrep -q '^PermitEmptyPasswords no' /etc/ssh/sshd_config
+  - egrep -q '^PermitRootLogin no' /etc/ssh/sshd_config
+  - pip list --format=columns | grep awscli | wc -l | awk '{ if($1 == 1) print "OK" }' | grep -q OK
+  - pip list --format=columns | grep ansible-lint | wc -l | awk '{ if($1 == 0) print "OK" }' | grep -q OK
+  - dpkg -l | egrep python-pip | wc -l | awk '{ if($1 == 0) print "OK" }' | grep -q OK
+  - dpkg -l | grep sendmail | wc -l | awk '{ if($1 == 1) print "OK" }' | grep -q OK
+
+
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/
+
