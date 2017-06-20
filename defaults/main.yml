@@ -21,12 +21,12 @@ sshd_config:
   PermitRootLogin: 'no'
   ListenAddress: '0.0.0.0'
 
-pip_install_pkgs:
-  - awscli
-  - { name: awscli, state: latest }
-  - { name: simplejson, version: 3.11.0 }
+pip_install_pkgs: []
+#  - awscli
+#  - { name: awscli, state: latest }
+#  - { name: simplejson, version: 3.11.1 }
 
-pip_remove_pkgs:
+pip_remove_pkgs: []
 #  - awscli
 #  - ansible
-  - ansible-lint
+#  - ansible-lint
