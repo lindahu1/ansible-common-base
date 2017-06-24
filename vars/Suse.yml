@@ -9,6 +9,7 @@ common_pkgs:
   - python
   - python-setuptools
   - python-devel
+  - python-selinux
   - libffi-devel-gcc5
   - openssl-devel
   - sysstat

@@ -8,6 +8,7 @@ common_pkgs:
   - python27
   - python27-setuptools
   - python27-devel
+  - libselinux-python
   - gcc
   - libffi-devel
   - openssl-devel
