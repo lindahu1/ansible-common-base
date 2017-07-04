@@ -122,6 +122,7 @@ common_pkgs:
   - sendmail
   - heirloom-mailx
   - telnet
+  - ntpdate
 ```
 
 Tags

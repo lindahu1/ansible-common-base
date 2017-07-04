@@ -16,3 +16,4 @@ common_pkgs:
   - sendmail
   - mailx
   - telnet
+  - ntpdate

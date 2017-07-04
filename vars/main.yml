@@ -3,3 +3,4 @@ common_pkgs:
   - vim
   - curl
   - wget
+  - ntpdate
