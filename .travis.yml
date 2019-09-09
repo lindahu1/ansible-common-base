@@ -30,7 +30,7 @@ script:
   - ansible-playbook -i tests/inventory tests/test.yml --syntax-check
 
   # Run the role/playbook with ansible-playbook.
-  - ansible-playbook -i tests/inventory tests/test.yml
+  - ansible-playbook -i tests/inventory  -e 'nolog=False' tests/test.yml
 
   # Idempotent check
   - >
@@ -40,7 +40,7 @@ script:
     || (echo 'Idempotence test: fail' && exit 1)
 
   # Verify final results
-  - date
+  - date; cat /etc/localtime; cat /etc/timezone
   - date |grep -q CST
   #- source /etc/bash.bashrc && echo $PROMPT_COMMAND |grep -q authpriv.info
   - egrep "^export PROMPT_COMMAND" /etc/bash.bashrc | grep  authpriv.info
