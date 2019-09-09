@@ -33,7 +33,6 @@
   changed_when: no
   no_log: false
 
-
 - name: Install pip packages
   environment:
     PATH: "{{ ansible_env.PATH }}:/usr/local/bin"

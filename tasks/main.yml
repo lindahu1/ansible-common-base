@@ -12,7 +12,6 @@
   when: ansible_distribution == 'Amazon'
   tags: [pkgs,pip,config,sshd]
 
-
 # set timezone
 - name: set timezone to {{ timezone }}
   timezone:
@@ -20,7 +19,7 @@
   become: yes
   no_log: false
   tags: [config]
-  when: timezone is defined and timezone != '' and (not timezone is none)
+  when: timezone is defined and timezone and (not timezone is none)
 
 # Install common packages
 - include: common_pkgs.yml
@@ -30,7 +29,6 @@
 - include: pip.yml
   when: install_pip
   tags: [pip,pkgs]
-
 
 # Configure common setting
 - include: common_config.yml

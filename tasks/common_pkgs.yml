@@ -9,7 +9,6 @@
   no_log: False
   tags: pkgs
 
-
 # Remove unwanted package
 - name: Remove unwatned packages
   action: "{{ ansible_pkg_mgr }} name={{ item }} state=absent"
@@ -35,4 +34,3 @@
   become: yes
   no_log: False
   tags: pkgs
-
