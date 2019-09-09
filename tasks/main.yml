@@ -20,6 +20,7 @@
   become: yes
   no_log: false
   tags: [config]
+  when: timezone is defined and timezone != '' and (not timezone is none)
 
 # Install common packages
 - include: common_pkgs.yml
