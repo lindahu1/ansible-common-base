@@ -21,6 +21,15 @@
   tags: [config]
   when: timezone is defined and timezone and (not timezone is none)
 
+- name: set timezone to {{ timezone }} by timedatectl
+  command: timedatectl set-timezone {{ timezone }}
+  become: yes
+  no_log: false
+  tags: [config]
+  when: timezone is defined and timezone and (not timezone is none) and ansible_date_time.tz != timezone
+
+# Install common packages
+
 # Install common packages
 - include: common_pkgs.yml
   tags: pkgs

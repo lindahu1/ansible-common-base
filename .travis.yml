@@ -50,8 +50,9 @@ script:
   - egrep -q '^PasswordAuthentication\s+yes' /etc/ssh/sshd_config
   - egrep -q '^PermitEmptyPasswords\s+no' /etc/ssh/sshd_config
   - egrep -q '^PermitRootLogin\s+no' /etc/ssh/sshd_config
-  - sudo -H pip list --format=columns | grep awscli | wc -l | awk '{ if($1 == 1) print "OK" }' | grep -q OK
-  - sudo -H pip list --format=columns | grep ansible-lint | wc -l | awk '{ if($1 == 0) print "OK" }' | grep -q OK
+  #- sudo -H pip list --format=columns | grep awscli | wc -l | awk '{ if($1 == 1) print "OK" }' | grep -q OK
+  - sudo pip list --format=columns | grep awscli | wc -l | awk '{ if($1 == 1) print "OK" }' | grep -q OK
+  - sudo pip list --format=columns | grep ansible-lint | wc -l | awk '{ if($1 == 0) print "OK" }' | grep -q OK
   - dpkg -l | egrep 'python-pip ' | wc -l | awk '{ if($1 == 0) print "OK" }' | grep -q OK
   - dpkg -l | grep 'sendmail ' | wc -l | awk '{ if($1 == 1) print "OK" }' | grep -q OK
 
