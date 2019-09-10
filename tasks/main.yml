@@ -13,26 +13,39 @@
   tags: [ pkgs, pip, config, sshd ]
 
 # set timezone
-- name: Get timedatectl information
-  command: timedatectl
-  register: timedatectl
-  ignore_errors: yes
-  when: timezone is defined and (not timezone is none)
-
-- name: set timezone to {{ timezone }} by timedatectl
-  command: timedatectl set-timezone {{ timezone }}
-  become: yes
-  no_log: "{{ nolog }}"
-  tags: [config]
-  when: timezone is defined and (not timezone is none) and timedatectl.rc == 0
+#- name: Get timedatectl information
+#  command: timedatectl
+#  register: timedatectl
+#  ignore_errors: yes
+#  when: timezone is defined and (not timezone is none)
+#- name: set timezone to {{ timezone }} by timedatectl
+#  command: timedatectl set-timezone {{ timezone }}
+#  become: yes
+#  no_log: "{{ nolog }}"
+#  tags: [config]
+#  when: timezone is defined and (not timezone is none) and timedatectl.rc == 0
 
 - name: set timezone to {{ timezone }}
   timezone:
     name: "{{ timezone }}"
   become: yes
-  no_log: "{{ nolog }}"
+  register: tz
   tags: [config]
-  when: timezone is defined and (not timezone is none) and timedatectl.rc != 0
+  when: timezone is defined and (not timezone is none)
+  #when: timezone is defined and (not timezone is none) and timedatectl.rc != 0
+
+- name: Debug
+  debug:
+    msg: "{{ tz }}"
+
+- name: Set localtime
+  file:
+    src: "/usr/share/zoneinfo/{{ timezone }}"
+    dest: /etc/localtime
+    state: link
+    force: yes
+  tags: [config]
+  when: timezone is defined and timezone and (not timezone is none) and tz.diff.before != tz.diff.after
 
 # Install common packages
 - include: common_pkgs.yml
