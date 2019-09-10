@@ -44,7 +44,7 @@ script:
 
   # Verify final results
   - timedatectl status | grep 'Time zone:' | grep -q 'Asia/Taipei'
-  - date |grep -q CST
+  #- date |grep -q CST
   #- source /etc/bash.bashrc && echo $PROMPT_COMMAND |grep -q authpriv.info
   - egrep "^export PROMPT_COMMAND" /etc/bash.bashrc | grep  authpriv.info
   - grep 'root:' /etc/aliases | grep -q 'test@abc.com'

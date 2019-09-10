@@ -43,7 +43,7 @@ Role Variables
   - if you want to run this role on **CentOS5**, MUST set `install_pip: False`.
   - This role does NOT support install pip and install/remove python packages on CentOS5.
 - **source_dir**: the path of directory to store downloaded files. (Default: /tmp)
-- **must_removed_pkgs**: a list of packages you want to remove. (Default: postfix, python-pip, python2-pip, python27-pip)
+- **must_removed_pkgs**: a list of packages you want to remove. (Default: [])
 - **sshd_config**: a dictionary of sshd_config, Default value is as below.
   - **PasswordAuthentication**: 'yes'
   - **PermitEmptyPasswords**: 'no'

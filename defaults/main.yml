@@ -10,11 +10,11 @@ bashrc_path: ''
 sshd_config_path: '/etc/ssh/sshd_config'
 install_pip: true
 source_dir: '/tmp'
-must_removed_pkgs:
-  - postfix
-  - python-pip
-  - python2-pip
-  - python27-pip
+must_removed_pkgs: []
+#  - postfix
+#  - python-pip
+#  - python2-pip
+#  - python27-pip
 
 sshd_config:
   PasswordAuthentication: 'yes'
