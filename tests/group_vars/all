@@ -6,4 +6,4 @@ pip_install_pkgs:
   - { name: simplejson, version: 3.10.0 }
 
 pip_remove_pkgs:
-  - ansible-lint
+  #- ansible-lint

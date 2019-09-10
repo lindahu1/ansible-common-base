@@ -33,7 +33,6 @@ script:
   - ansible-playbook -i tests/inventory  -e 'nolog=False' tests/test.yml
 
   # Idempotent check
-  - ansible-playbook -i tests/inventory  -e 'nolog=False' tests/test.yml
   - >
     ansible-playbook -i tests/inventory tests/test.yml
     | grep -q 'changed=0.*unreachable=0.*failed=0'
@@ -41,7 +40,7 @@ script:
     || (echo 'Idempotence test: fail' && exit 1)
 
   # Verify final results
-  - timedatectl status | grep -q 'Time zone: Asia/Taipei'
+  - timedatectl status | grep 'Time zone:' | grep -q 'Asia/Taipei'
   - cat /etc/timezone || true
   #- date |grep -q CST
   #- source /etc/bash.bashrc && echo $PROMPT_COMMAND |grep -q authpriv.info
@@ -54,7 +53,7 @@ script:
   - egrep -q '^PermitRootLogin\s+no' /etc/ssh/sshd_config
   #- sudo -H pip list --format=columns | grep awscli | wc -l | awk '{ if($1 == 1) print "OK" }' | grep -q OK
   - sudo pip list --format=columns | grep awscli | wc -l | awk '{ if($1 == 1) print "OK" }' | grep -q OK
-  - sudo pip list --format=columns | grep ansible-lint | wc -l | awk '{ if($1 == 0) print "OK" }' | grep -q OK
+  ##- sudo pip list --format=columns | grep ansible-lint | wc -l | awk '{ if($1 == 0) print "OK" }' | grep -q OK
   - dpkg -l | egrep 'python-pip ' | wc -l | awk '{ if($1 == 0) print "OK" }' | grep -q OK
   - dpkg -l | grep 'sendmail ' | wc -l | awk '{ if($1 == 1) print "OK" }' | grep -q OK
   - pip list
