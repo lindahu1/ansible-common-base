@@ -6,7 +6,7 @@
     state: present
   when: ansible_pkg_mgr == 'yum'
   become: yes
-  no_log: False
+  no_log: "{{ nolog }}"
   tags: pkgs
 
 # Remove unwanted package
@@ -14,7 +14,7 @@
   action: "{{ ansible_pkg_mgr }} name={{ must_removed_pkgs }} state=absent"
   when: ansible_pkg_mgr is defined
   become: yes
-  no_log: False
+  no_log: "{{ nolog }}"
   tags: pkgs
 
 # install common package
@@ -22,12 +22,12 @@
   action: "{{ ansible_pkg_mgr }} name={{ common_pkgs }} state=present update_cache=yes"
   when: ansible_os_family != 'Debian' and ansible_pkg_mgr is defined
   become: yes
-  no_log: False
+  no_log: "{{ nolog }}"
   tags: pkgs
 
 - name: install common packages for Debian/Ubuntu
   action: "{{ ansible_pkg_mgr }} name={{ common_pkgs }} state=present update_cache=yes cache_valid_time=345600 autoclean=yes autoremove=yes"
   when: ansible_os_family == 'Debian'
   become: yes
-  no_log: False
+  no_log: "{{ nolog }}"
   tags: pkgs

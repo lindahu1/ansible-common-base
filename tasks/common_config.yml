@@ -5,7 +5,7 @@
     regexp: '^export PROMPT_COMMAND'
     line: "export PROMPT_COMMAND='RETRN_VAL=$?;/usr/bin/logger -p authpriv.info \"SECURE $(whoami) [$$]: $(history 1 | sed \"s/^[ ]*[0-9]\\+[ ]*//\" )\"'"
   when: bashrc_path is defined and bashrc_path and (not bashrc_path is none)
-  no_log: false
+  no_log: "{{ nolog }}"
 
 - name: set root in /etc/aliases
   lineinfile:
@@ -13,7 +13,7 @@
     regexp: '^root:'
     line: "root:\t\t{{ rootalias }}"
   when: rootalias is defined and rootalias and (not rootalias is none)
-  no_log: false
+  no_log: "{{ nolog }}"
   notify:
     - newaliases
 
@@ -26,7 +26,7 @@
     hour: "{{ ntp_cron_hour }}"
     job: "/usr/sbin/ntpdate pool.ntp.org > /dev/null 2>&1"
   become: yes
-  no_log: false
+  no_log: "{{ nolog }}"
   when: ntp_cron_min is defined and ntp_cron_hour is defined and ntp_cron_min and ntp_cron_hour and (not ntp_cron_min is none) and (not ntp_cron_hour is none)
 
 - name: remove cron for ntp update
@@ -38,5 +38,5 @@
     hour: "{{ ntp_cron_hour | default(omit) }}"
     job: "/usr/sbin/ntpdate pool.ntp.org > /dev/null 2>&1"
   become: yes
-  no_log: false
+  no_log: "{{ nolog }}"
   when: ntp_cron_min is undefined or ntp_cron_hour is undefined or not ntp_cron_min or not ntp_cron_hour or ntp_cron_min is none or ntp_cron_hour is none

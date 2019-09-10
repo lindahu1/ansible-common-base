@@ -9,3 +9,10 @@ pip_install_pkgs:
 pip_remove_pkgs:
   - ansible-lint
   - cryptography
+
+must_removed_pkgs:
+  - postfix
+  - python-pip
+  - python2-pip
+  - python27-pip
+

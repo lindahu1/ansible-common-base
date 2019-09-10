@@ -9,7 +9,7 @@
   register: installed_pip
   changed_when: no
   failed_when: no
-  no_log: False
+  no_log: "{{ nolog }}"
 
 - name: download pip installer
   get_url:
@@ -17,13 +17,13 @@
     dest="{{ source_dir | default('/tmp') }}/get-pip.py"
   become: yes
   when: installed_pip is defined and installed_pip.rc != 0
-  no_log: False
+  no_log: "{{ nolog }}"
 
 - name: install pip
   command: "python {{ source_dir | default('/tmp') }}/get-pip.py"
   become: yes
   when: installed_pip is defined and installed_pip.rc != 0
-  no_log: False
+  no_log: "{{ nolog }}"
 
 - name: check if pip is installed
   environment:
@@ -31,7 +31,7 @@
   command: pip --version
   when: installed_pip is defined
   changed_when: no
-  no_log: false
+  no_log: "{{ nolog }}"
 
 - name: Install pip packages
   environment:
@@ -43,7 +43,7 @@
     executable: "{{ item.executable | default(omit) }}"
   when: item is defined
   with_items: "{{ pip_install_pkgs }}"
-  no_log: false
+  no_log: "{{ nolog }}"
 
 - name: Remove pip packages
   environment:
@@ -53,4 +53,4 @@
     state: absent
     executable: "{{ item.executable | default(omit) }}"
   when: pip_remove_pkgs and pip_remove_pkgs|length > 0
-  no_log: false
+  no_log: "{{ nolog }}"

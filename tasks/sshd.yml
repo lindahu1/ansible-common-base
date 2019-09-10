@@ -31,7 +31,7 @@
     and (not sshd_config.ListenAddress is none) and
     mark_ListenAddress_result.rc == 0 and unmark_ListenAddress_result.rc != 0
   become: yes
-  no_log: false
+  no_log: "{{ nolog }}"
   notify:
     - restart sshd
 
@@ -46,7 +46,7 @@
     and (not sshd_config.ListenAddress is none) and
     mark_ListenAddress_result.rc != 0 and unmark_ListenAddress_result.rc != 0
   become: yes
-  no_log: false
+  no_log: "{{ nolog }}"
   notify:
     - restart sshd
 
@@ -82,7 +82,7 @@
     and (not sshd_config.PasswordAuthentication is none) and
     mark_PasswordAuthentication_result.rc == 0 and unmark_PasswordAuthentication_result.rc != 0
   become: yes
-  no_log: false
+  no_log: "{{ nolog }}"
   notify:
     - restart sshd
 
@@ -97,7 +97,7 @@
     and (not sshd_config.PasswordAuthentication is none) and
     mark_PasswordAuthentication_result.rc != 0 and unmark_PasswordAuthentication_result.rc != 0
   become: yes
-  no_log: false
+  no_log: "{{ nolog }}"
   notify:
 
 # PermitEmptyPasswords
@@ -132,7 +132,7 @@
     and (not sshd_config.PermitEmptyPasswords is none) and
     mark_PermitEmptyPasswords_result.rc == 0 and unmark_PermitEmptyPasswords_result.rc != 0
   become: yes
-  no_log: false
+  no_log: "{{ nolog }}"
   notify:
     - restart sshd
 
@@ -147,7 +147,7 @@
     and (not sshd_config.PermitEmptyPasswords is none) and
     mark_PermitEmptyPasswords_result.rc != 0 and unmark_PermitEmptyPasswords_result.rc != 0
   become: yes
-  no_log: false
+  no_log: "{{ nolog }}"
   notify:
     - restart sshd
 
@@ -183,7 +183,7 @@
     and (not sshd_config.PermitRootLogin is none) and
     mark_PermitRootLogin_result.rc == 0 and unmark_PermitRootLogin_result.rc != 0
   become: yes
-  no_log: false
+  no_log: "{{ nolog }}"
   notify:
     - restart sshd
 
@@ -198,7 +198,7 @@
     and (not sshd_config.PermitRootLogin is none) and
     mark_PermitRootLogin_result.rc != 0 and unmark_PermitRootLogin_result.rc != 0
   become: yes
-  no_log: false
+  no_log: "{{ nolog }}"
   notify:
     - restart sshd
 
@@ -218,6 +218,6 @@
     backrefs: yes
   with_dict: "{{ sshd_config }}"
   become: yes
-  no_log: false
+  no_log: "{{ nolog }}"
   notify:
     - restart sshd
