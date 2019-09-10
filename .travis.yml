@@ -42,6 +42,7 @@ script:
   # Verify final results
   - timedatectl status | grep 'Time zone:' | grep -q 'Asia/Taipei'
   - cat /etc/timezone || true
+  - ls -la /etc/localtime ; date
   #- date |grep -q CST
   #- source /etc/bash.bashrc && echo $PROMPT_COMMAND |grep -q authpriv.info
   - egrep "^export PROMPT_COMMAND" /etc/bash.bashrc | grep  authpriv.info
@@ -51,9 +52,8 @@ script:
   - egrep -q '^PasswordAuthentication\s+yes' /etc/ssh/sshd_config
   - egrep -q '^PermitEmptyPasswords\s+no' /etc/ssh/sshd_config
   - egrep -q '^PermitRootLogin\s+no' /etc/ssh/sshd_config
-  #- sudo -H pip list --format=columns | grep awscli | wc -l | awk '{ if($1 == 1) print "OK" }' | grep -q OK
-  - sudo pip list --format=columns | grep awscli | wc -l | awk '{ if($1 == 1) print "OK" }' | grep -q OK
-  ##- sudo pip list --format=columns | grep ansible-lint | wc -l | awk '{ if($1 == 0) print "OK" }' | grep -q OK
+  - sudo pip list | grep awscli | wc -l | awk '{ if($1 == 1) print "OK" }' | grep -q OK
+  ##- sudo pip list | grep ansible-lint | wc -l | awk '{ if($1 == 0) print "OK" }' | grep -q OK
   - dpkg -l | egrep 'python-pip ' | wc -l | awk '{ if($1 == 0) print "OK" }' | grep -q OK
   - dpkg -l | grep 'sendmail ' | wc -l | awk '{ if($1 == 1) print "OK" }' | grep -q OK
   - pip list
