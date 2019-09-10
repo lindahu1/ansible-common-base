@@ -32,15 +32,25 @@
   no_log: "{{ nolog }}"
   register: tz
   tags: [config]
-  when: timezone is defined and timezone and (not timezone is none)
   #when: timezone is defined and timezone and (not timezone is none) and timedatectl.rc != 0
-  notify:
-    - update tzdata
-    - restart crond
+  when: timezone is defined and timezone and (not timezone is none)
 
 - name: Debug
   debug:
     msg: "{{ tz }}"
+
+- name: Set localtime
+  file:
+    src: "/usr/share/zoneinfo/{{ timezone }}"
+    dest: /etc/localtime
+    state: link
+    force: yes
+  tags: [config]
+  when: timezone is defined and timezone and (not timezone is none)
+  #when: tz.diff.before != tz.diff.after
+  #notify:
+  #  - update tzdata
+  #  - restart crond
 
 # Install common packages
 - include: common_pkgs.yml

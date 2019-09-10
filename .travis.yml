@@ -40,8 +40,9 @@ script:
     || (echo 'Idempotence test: fail' && exit 1)
 
   # Verify final results
+  #- sudo dpkg-reconfigure --frontend noninteractive tzdata
   - timedatectl status
-  - date; cat /etc/localtime; cat /etc/timezone
+  - date; ls -la /etc/localtime
   - date |grep -q CST
   #- source /etc/bash.bashrc && echo $PROMPT_COMMAND |grep -q authpriv.info
   - egrep "^export PROMPT_COMMAND" /etc/bash.bashrc | grep  authpriv.info
