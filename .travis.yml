@@ -43,8 +43,8 @@ script:
     || (echo 'Idempotence test: fail' && exit 1)
 
   # Verify final results
-  ##- timedatectl status | grep 'Time zone:' | grep -q 'Asia/Taipei'
-  #- date |grep -q CST
+  - timedatectl status | grep 'Time zone:' | grep -q 'Asia/Taipei'
+  - date |grep -q CST
   #- source /etc/bash.bashrc && echo $PROMPT_COMMAND |grep -q authpriv.info
   - egrep "^export PROMPT_COMMAND" /etc/bash.bashrc | grep  authpriv.info
   - grep 'root:' /etc/aliases | grep -q 'test@abc.com'
@@ -59,7 +59,8 @@ script:
   - dpkg -l | grep 'sendmail ' | wc -l | awk '{ if($1 == 1) print "OK" }' | grep -q OK
   # for final debug
   - timedatectl
-  - ls -la /etc/localtime ; date
+  - ls -la /etc/localtime
+  - date
   - cat /etc/timezone || true
   - pip list
   - echo $TZ || true

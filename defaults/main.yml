@@ -1,6 +1,5 @@
 ---
 nolog: True
-#timezone: 'Asia/Taipei'
 timezone: ''
 ntp_cron_min: '2'
 ntp_cron_hour: '*/3'

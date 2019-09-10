@@ -31,7 +31,7 @@ Requirements
 Role Variables
 --------------
 
-- **timezone**: (Default: Asia/Taipei)
+- **timezone**: (Default: '')
 - **ntp_cron_min**: the minute to execute ntpdate. (Default: 2)
 - **ntp_cron_hour**: the hour to execute ntpdate. (Default: '*/3')
 - **common_pkgs**: a list of packages you want to install. (Default: vim, curl, wget)
