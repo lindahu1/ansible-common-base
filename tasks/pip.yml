@@ -33,8 +33,6 @@
   changed_when: no
   no_log: false
 
-- debug:
-    msg: Remove pip length - {{ pip_remove_pkgs|length }}
 - name: Install pip packages
   environment:
     PATH: "{{ ansible_env.PATH }}:/usr/local/bin"
