@@ -17,14 +17,14 @@
   command: timedatectl
   register: timedatectl
   ignore_errors: yes
-  when: timezone
+  when: timezone is defined and (not timezone is none)
 
 - name: set timezone to {{ timezone }} by timedatectl
   command: timedatectl set-timezone {{ timezone }}
   become: yes
   no_log: "{{ nolog }}"
   tags: [config]
-  when: timezone is defined and timezone and (not timezone is none) and timedatectl.rc == 0
+  when: timezone is defined and (not timezone is none) and timedatectl.rc == 0
 
 - name: set timezone to {{ timezone }}
   timezone:
@@ -32,7 +32,7 @@
   become: yes
   no_log: "{{ nolog }}"
   tags: [config]
-  when: timezone is defined and timezone and (not timezone is none) and timedatectl.rc != 0
+  when: timezone is defined and (not timezone is none) and timedatectl.rc != 0
 
 # Install common packages
 - include: common_pkgs.yml
