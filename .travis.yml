@@ -40,6 +40,7 @@ script:
     || (echo 'Idempotence test: fail' && exit 1)
 
   # Verify final results
+  - timedatectl status
   - date; cat /etc/localtime; cat /etc/timezone
   - date |grep -q CST
   #- source /etc/bash.bashrc && echo $PROMPT_COMMAND |grep -q authpriv.info

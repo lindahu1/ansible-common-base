@@ -3,32 +3,35 @@
   include_vars: "{{ ansible_os_family | default('main') }}.yml"
   register: addvars
   when: ansible_distribution != 'Amazon'
-  tags: [pkgs,pip,config,sshd]
+  tags: [pkgs, pip, config, sshd]
 
 - debug: var=addvars
 
 - name: Add the OS specific variables for Amazon
   include_vars: "{{ ansible_distribution | default('main') }}.yml"
   when: ansible_distribution == 'Amazon'
-  tags: [pkgs,pip,config,sshd]
+  tags: [pkgs, pip, config, sshd]
 
 # set timezone
-- name: set timezone to {{ timezone }}
-  timezone:
-    name: "{{ timezone }}"
-  become: yes
-  no_log: false
-  tags: [config]
-  when: timezone is defined and timezone and (not timezone is none)
+- name: Get timedatectl information
+  command: timedatectl
+  register: timedatectl
+  ignore_errors: yes
 
 - name: set timezone to {{ timezone }} by timedatectl
   command: timedatectl set-timezone {{ timezone }}
   become: yes
-  no_log: false
+  no_log: "{{ nolog }}"
   tags: [config]
-  when: timezone is defined and timezone and (not timezone is none) and ansible_date_time.tz != timezone
+  when: timezone is defined and timezone and (not timezone is none) and timedatectl.rc == 0
 
-# Install common packages
+- name: set timezone to {{ timezone }}
+  timezone:
+    name: "{{ timezone }}"
+  become: yes
+  no_log: "{{ nolog }}"
+  tags: [config]
+  when: timezone is defined and timezone and (not timezone is none) and timedatectl.rc != 0
 
 # Install common packages
 - include: common_pkgs.yml
@@ -37,7 +40,7 @@
 # Install pip
 - include: pip.yml
   when: install_pip
-  tags: [pip,pkgs]
+  tags: [pip, pkgs]
 
 # Configure common setting
 - include: common_config.yml
