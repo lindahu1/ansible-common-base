@@ -40,7 +40,7 @@ script:
     || (echo 'Idempotence test: fail' && exit 1)
 
   # Verify final results
-  #- sudo dpkg-reconfigure --frontend noninteractive tzdata
+  - sudo dpkg-reconfigure --frontend noninteractive tzdata
   - timedatectl status
   - date; ls -la /etc/localtime
   - date |grep -q CST

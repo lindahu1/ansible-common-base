@@ -33,6 +33,8 @@
   changed_when: no
   no_log: false
 
+- debug:
+    msg: Remove pip length - {{ pip_remove_pkgs|length }}
 - name: Install pip packages
   environment:
     PATH: "{{ ansible_env.PATH }}:/usr/local/bin"
@@ -49,9 +51,8 @@
   environment:
     PATH: "{{ ansible_env.PATH }}:/usr/local/bin"
   pip:
-    name: "{{ item.name | default(item) }}"
+    name: "{{ pip_remove_pkgs }}"
     state: absent
     executable: "{{ item.executable | default(omit) }}"
-  when: item is defined
-  with_items: "{{ pip_remove_pkgs }}"
+  when: pip_remove_pkgs and pip_remove_pkgs|length > 0
   no_log: false
