@@ -3,14 +3,14 @@
   include_vars: "{{ ansible_os_family | default('main') }}.yml"
   register: addvars
   when: ansible_distribution != 'Amazon'
-  tags: [pkgs, pip, config, sshd]
+  tags: [ pkgs, pip, config, sshd ]
 
 - debug: var=addvars
 
 - name: Add the OS specific variables for Amazon
   include_vars: "{{ ansible_distribution | default('main') }}.yml"
   when: ansible_distribution == 'Amazon'
-  tags: [pkgs, pip, config, sshd]
+  tags: [ pkgs, pip, config, sshd ]
 
 # set timezone
 - name: Get timedatectl information
@@ -30,15 +30,17 @@
     name: "{{ timezone }}"
   become: yes
   no_log: "{{ nolog }}"
+  register: tz
   tags: [config]
-  when: timezone is defined and timezone and (not timezone is none) and timedatectl.rc != 0
+  when: timezone is defined and timezone and (not timezone is none)
+  #when: timezone is defined and timezone and (not timezone is none) and timedatectl.rc != 0
+  notify:
+    - update tzdata
+    - restart crond
 
-- name: Set hardware clock to use or not use local RTC
-  shell: "timedatectl set-local-rtc {% if timezone_use_local_rtc %}1{% else %}0{% endif %} && timedatectl || true"
-  register: timedatectl_rtc
-  no_log: "{{ nolog }}"
-  changed_when: "'RTC in local TZ: {% if timezone_use_local_rtc %}yes{% else %}no{% endif %}' in timedatectl_rtc.stdout"
-  when: "timezone_use_local_rtc and 'RTC in local TZ: no' not in timedatectl_rtc.stdout"
+- name: Debug
+  debug:
+    msg: "{{ tz }}"
 
 # Install common packages
 - include: common_pkgs.yml
@@ -47,7 +49,7 @@
 # Install pip
 - include: pip.yml
   when: install_pip
-  tags: [pip, pkgs]
+  tags: [ pip, pkgs ]
 
 # Configure common setting
 - include: common_config.yml
