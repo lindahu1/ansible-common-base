@@ -19,21 +19,11 @@
   become: yes
   register: tz
   tags: [config]
-  when: timezone is defined and (not timezone is none)
+  when: timezone is defined and timezone and (not timezone is none)
 
 - name: Debug
   debug:
     msg: "{{ tz }}"
-
-#- name: Set localtime
-#  file:
-#    src: "/usr/share/zoneinfo/{{ timezone }}"
-#    dest: /etc/localtime
-#    state: link
-#    force: yes
-#  become: yes
-#  tags: [config]
-#  when: timezone is defined and timezone and (not timezone is none) and tz.diff.before != tz.diff.after
 
 # Install common packages
 - include: common_pkgs.yml
