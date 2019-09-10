@@ -1,4 +1,6 @@
 ---
+nolog: True
+timezone_use_local_rtc: true
 timezone: 'Asia/Taipei'
 ntp_cron_min: '2'
 ntp_cron_hour: '*/3'

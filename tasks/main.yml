@@ -33,6 +33,13 @@
   tags: [config]
   when: timezone is defined and timezone and (not timezone is none) and timedatectl.rc != 0
 
+- name: Set hardware clock to use or not use local RTC
+  shell: "timedatectl set-local-rtc {% if timezone_use_local_rtc %}1{% else %}0{% endif %} && timedatectl || true"
+  register: timedatectl_rtc
+  no_log: "{{ nolog }}"
+  changed_when: "'RTC in local TZ: {% if timezone_use_local_rtc %}yes{% else %}no{% endif %}' in timedatectl_rtc.stdout"
+  when: timezone_use_local_rtc and 'RTC in local TZ: no' not in timedatectl_rtc.stdout
+
 # Install common packages
 - include: common_pkgs.yml
   tags: pkgs
